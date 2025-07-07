@@ -57,18 +57,20 @@
       background-color: #f1c40f;
       color: #2c3e50;
       font-weight: bold;
-      padding: 0.8rem 1.2rem;
+      padding: 1.2rem 2rem;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 12px;
+      font-size: 1.3rem;
       text-decoration: none;
       display: inline-block;
-      margin-top: 1rem;
-      transition: background-color 0.3s;
+      margin-top: 1.5rem;
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .cta-button:hover {
       background-color: #d4ac0d;
+      transform: scale(1.05);
     }
 
     .content-section {
@@ -92,18 +94,41 @@
       text-align: center;
     }
 
-    .event h2 {
-      font-size: 1.8rem;
-      color: #2c3e50;
-      margin-bottom: 1rem;
-    }
-
     .event img {
       width: 100%;
       max-width: 600px;
       border-radius: 10px;
+      margin-top: 1.5rem;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: opacity 0.5s ease;
+      transition: transform 0.3s ease, opacity 0.5s ease;
+    }
+
+    .event p {
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+    }
+
+    .image-switcher {
+      margin-bottom: 1rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .image-switcher a {
+      color: #2980b9;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    #dotsContainer {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .dot {
+      cursor: pointer;
+      margin: 0 5px;
+      user-select: none;
     }
 
     .placeholder {
@@ -120,35 +145,12 @@
       color: #888;
       margin-top: 2rem;
     }
-
-    .dot {
-      cursor: pointer;
-      font-size: 1.5rem;
-      color: #3498db;
-      margin: 0 0.3rem;
-      transition: transform 0.2s;
-    }
-
-    .dot:hover {
-      transform: scale(1.2);
-    }
-
-    #imageSwitcherLink {
-      display: block;
-      margin-bottom: 1rem;
-      font-weight: bold;
-      color: #2c3e50;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    #imageSwitcherLink:hover {
-      color: #1b2c40;
-    }
   </style>
 </head>
 <body>
-	<audio id="bgMusic" src="Musique.mp3" autoplay muted loop></audio>
+
+  <audio id="bgMusic" src="Musique.mp3" autoplay muted loop></audio>
+
   <nav>
     <a href="#" class="active" onclick="showSection(event, 'info')">Informations utiles</a>
     <a href="#" onclick="showSection(event, 'plan')">Plan de table</a>
@@ -164,19 +166,12 @@
 
   <section id="info" class="content-section active">
     <div class="event">
-      <h2>🎉 Programme de la Bar Mitsva</h2>
-
-      <a id="imageSwitcherLink" onclick="toggleImage()">Voir les infos de la mise des Téphilines et la fête</a>
-
-      <div style="position: relative; max-width: 600px; margin: auto;">
-        <img id="eventImage" src="Shabbat.jpg" alt="Événement Bar Mitsva">
+      <div class="image-switcher">
+        <a href="javascript:void(0);" id="imageSwitcherLink">Voir les infos de la mise des Téphilines et la fête</a>
       </div>
-
-      <p id="imageCaption" style="text-align: center; margin-top: 1rem; font-size: 1.1rem; color: #555;">
-        Lecture de la Paracha le samedi matin, suivie d’un kiddouch chaleureux.
-      </p>
-
-      <div id="dotsContainer" style="text-align: center; margin-top: 0.5rem;">
+      <img id="eventImage" src="Shabbat.jpg" alt="Événement" />
+      <p id="imageCaption">Lecture de la Paracha le samedi matin, suivie d’un kiddouch chaleureux.</p>
+      <div id="dotsContainer">
         <span class="dot" onclick="goToImage(0)">●</span>
         <span class="dot" onclick="goToImage(1)">○</span>
       </div>
@@ -196,6 +191,17 @@
   </footer>
 
   <script>
+    function showSection(event, id) {
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.querySelectorAll('nav a').forEach(link => {
+        link.classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+
     const images = [
       {
         src: "Shabbat.jpg",
@@ -210,6 +216,7 @@
     ];
 
     let currentIndex = 0;
+    let carouselInterval;
 
     function showImage(index) {
       const imageEl = document.getElementById("eventImage");
@@ -224,7 +231,6 @@
         imageEl.src = images[index].src;
         captionEl.textContent = images[index].caption;
         linkEl.textContent = images[index].linkText;
-
         imageEl.style.opacity = 1;
         captionEl.style.opacity = 1;
 
@@ -243,39 +249,39 @@
 
     function goToImage(index) {
       showImage(index);
+      resetCarouselTimer();
     }
 
-    function showSection(event, id) {
-      document.querySelectorAll('.content-section').forEach(section => {
-        section.classList.remove('active');
-      });
+    function startCarousel() {
+      carouselInterval = setInterval(toggleImage, 2000);
+    }
 
-      document.querySelectorAll('nav a').forEach(link => {
-        link.classList.remove('active');
-      });
-
-      document.getElementById(id).classList.add('active');
-      event.target.classList.add('active');
+    function resetCarouselTimer() {
+      clearInterval(carouselInterval);
+      startCarousel();
     }
 
     document.addEventListener("DOMContentLoaded", () => {
       showImage(currentIndex);
-    });
-	
- // Débloque le son dès la première interaction utilisateur
-  function enableSoundOnce() {
-    const audio = document.getElementById('bgMusic');
-    if (audio) {
-      audio.muted = false;
-      audio.play();
-    }
-    document.removeEventListener('click', enableSoundOnce);
-    document.removeEventListener('keydown', enableSoundOnce);
-  }
+      startCarousel();
 
-  document.addEventListener('click', enableSoundOnce);
-  document.addEventListener('keydown', enableSoundOnce);	
-	
+      // Activer le son après interaction
+      const audio = document.getElementById("bgMusic");
+      function enableSoundOnce() {
+        audio.muted = false;
+        audio.play();
+        document.removeEventListener("click", enableSoundOnce);
+        document.removeEventListener("keydown", enableSoundOnce);
+      }
+
+      document.addEventListener("click", enableSoundOnce);
+      document.addEventListener("keydown", enableSoundOnce);
+
+      document.getElementById("imageSwitcherLink").addEventListener("click", () => {
+        toggleImage();
+        resetCarouselTimer();
+      });
+    });
   </script>
 
 </body>
