@@ -148,7 +148,7 @@
   </style>
 </head>
 <body>
-
+	<audio id="bgMusic" src="Musique.mp3" autoplay muted loop></audio>
   <nav>
     <a href="#" class="active" onclick="showSection(event, 'info')">Informations utiles</a>
     <a href="#" onclick="showSection(event, 'plan')">Plan de table</a>
@@ -261,6 +261,21 @@
     document.addEventListener("DOMContentLoaded", () => {
       showImage(currentIndex);
     });
+	
+ // Débloque le son dès la première interaction utilisateur
+  function enableSoundOnce() {
+    const audio = document.getElementById('bgMusic');
+    if (audio) {
+      audio.muted = false;
+      audio.play();
+    }
+    document.removeEventListener('click', enableSoundOnce);
+    document.removeEventListener('keydown', enableSoundOnce);
+  }
+
+  document.addEventListener('click', enableSoundOnce);
+  document.addEventListener('keydown', enableSoundOnce);	
+	
   </script>
 
 </body>
