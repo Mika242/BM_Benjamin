@@ -12,7 +12,6 @@
       padding: 0;
     }
 
-    /* Nouveau menu clair */
     nav {
       background-color: #ffffff;
       display: flex;
@@ -99,23 +98,12 @@
       margin-bottom: 1rem;
     }
 
-    .event p {
-      font-size: 1.2rem;
-      margin: 0.5rem 0;
-    }
-
     .event img {
       width: 100%;
       max-width: 600px;
       border-radius: 10px;
-      margin-top: 1.5rem;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .event img:hover {
-      transform: scale(1.02);
+      transition: opacity 0.5s ease;
     }
 
     .placeholder {
@@ -132,11 +120,35 @@
       color: #888;
       margin-top: 2rem;
     }
+
+    .dot {
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: #3498db;
+      margin: 0 0.3rem;
+      transition: transform 0.2s;
+    }
+
+    .dot:hover {
+      transform: scale(1.2);
+    }
+
+    #imageSwitcherLink {
+      display: block;
+      margin-bottom: 1rem;
+      font-weight: bold;
+      color: #2c3e50;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    #imageSwitcherLink:hover {
+      color: #1b2c40;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Menu clair avec classes dynamiques -->
   <nav>
     <a href="#" class="active" onclick="showSection(event, 'info')">Informations utiles</a>
     <a href="#" onclick="showSection(event, 'plan')">Plan de table</a>
@@ -152,21 +164,22 @@
 
   <section id="info" class="content-section active">
     <div class="event">
-      <h2>📖 Lecture de la Paracha – Shabbat</h2>
-      <p><strong>🗓️ Samedi 13 septembre 2025 à 9h30</strong></p>
-      <p><strong>📍 Synagogue du Bne Akiva – 12 rue de Lorraine, 75019 Paris</strong></p>
-      <p>L’office sera suivi d’un kiddouch convivial</p>
-      <img src="Shabbat.jpg" alt="Lecture de la Torah pendant Shabbat">
-    </div>
+      <h2>🎉 Programme de la Bar Mitsva</h2>
 
-    <div class="event">
-      <h2>🕊️ Téphilines & Fête – Dimanche</h2>
-      <p><strong>🗓️ Dimanche 14 septembre 2025 à 9h00</strong></p>
-      <p><strong>📍 Synagogue du Bne Akiva – 12 rue de Lorraine, 75019 Paris</strong></p>
-      <p>Après la mise des Téphilines, vous êtes chaleureusement invités à la fête 🎉</p>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdMz_DPmhKg5Tn46-pWnnLqYoa8tFFakUmQ_SzQpNVG3ul1OA/viewform?usp=dialog" target="_blank">
-        <img src="TephilineFete.jpg" alt="Mise des Téphilines et fête de la Bar Mitsva">
-      </a>
+      <a id="imageSwitcherLink" onclick="toggleImage()">Voir les infos de la mise des Téphilines et la fête</a>
+
+      <div style="position: relative; max-width: 600px; margin: auto;">
+        <img id="eventImage" src="Shabbat.jpg" alt="Événement Bar Mitsva">
+      </div>
+
+      <p id="imageCaption" style="text-align: center; margin-top: 1rem; font-size: 1.1rem; color: #555;">
+        Lecture de la Paracha le samedi matin, suivie d’un kiddouch chaleureux.
+      </p>
+
+      <div id="dotsContainer" style="text-align: center; margin-top: 0.5rem;">
+        <span class="dot" onclick="goToImage(0)">●</span>
+        <span class="dot" onclick="goToImage(1)">○</span>
+      </div>
     </div>
   </section>
 
@@ -183,21 +196,71 @@
   </footer>
 
   <script>
+    const images = [
+      {
+        src: "Shabbat.jpg",
+        caption: "Lecture de la Paracha le samedi matin, suivie d’un kiddouch chaleureux.",
+        linkText: "Voir les infos de la mise des Téphilines et la fête"
+      },
+      {
+        src: "TephilineFete.jpg",
+        caption: "Mise des Téphilines dimanche matin, suivie de la fête 🎉.",
+        linkText: "Voir les infos du Shabbat"
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function showImage(index) {
+      const imageEl = document.getElementById("eventImage");
+      const captionEl = document.getElementById("imageCaption");
+      const linkEl = document.getElementById("imageSwitcherLink");
+      const dots = document.querySelectorAll("#dotsContainer .dot");
+
+      imageEl.style.opacity = 0;
+      captionEl.style.opacity = 0;
+
+      setTimeout(() => {
+        imageEl.src = images[index].src;
+        captionEl.textContent = images[index].caption;
+        linkEl.textContent = images[index].linkText;
+
+        imageEl.style.opacity = 1;
+        captionEl.style.opacity = 1;
+
+        dots.forEach((dot, i) => {
+          dot.textContent = i === index ? "●" : "○";
+        });
+      }, 200);
+
+      currentIndex = index;
+    }
+
+    function toggleImage() {
+      const nextIndex = (currentIndex + 1) % images.length;
+      showImage(nextIndex);
+    }
+
+    function goToImage(index) {
+      showImage(index);
+    }
+
     function showSection(event, id) {
-      // Masquer toutes les sections
       document.querySelectorAll('.content-section').forEach(section => {
         section.classList.remove('active');
       });
 
-      // Retirer la classe active de tous les liens
       document.querySelectorAll('nav a').forEach(link => {
         link.classList.remove('active');
       });
 
-      // Afficher la bonne section et marquer le lien actif
       document.getElementById(id).classList.add('active');
       event.target.classList.add('active');
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      showImage(currentIndex);
+    });
   </script>
 
 </body>
