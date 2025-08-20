@@ -2,287 +2,356 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bar Mitsva de Benjamin</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #f5f8fc;
       color: #333;
-      margin: 0;
-      padding: 0;
     }
-
-    nav {
-      background-color: #ffffff;
-      display: flex;
-      justify-content: center;
-      border-bottom: 1px solid #ccc;
-    }
-
-    nav a {
-      color: #2c3e50;
-      text-decoration: none;
-      padding: 1rem 1.5rem;
-      font-weight: bold;
-      transition: background-color 0.3s;
-    }
-
-    nav a:hover {
-      background-color: #eef6ff;
-    }
-
-    nav a.active {
-      background-color: #d0e8ff;
-      color: #1b2c40;
-    }
-
     header {
-      background: linear-gradient(135deg, #2c3e50, #3498db);
+      background: #003366;
       color: white;
-      padding: 2rem 1rem;
+      padding: 1rem;
       text-align: center;
     }
-
-    header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
+    nav {
+      background: #0055aa;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 1rem;
+      flex-wrap: wrap;
     }
-
-    header p {
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-    }
-
-    .cta-button {
-      background-color: #f1c40f;
-      color: #2c3e50;
-      font-weight: bold;
-      padding: 1.2rem 2rem;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.3rem;
+    nav a {
+      color: white;
       text-decoration: none;
-      display: inline-block;
-      margin-top: 1.5rem;
-      transition: background-color 0.3s, transform 0.2s;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      font-weight: bold;
+      cursor: pointer;
     }
-
-    .cta-button:hover {
-      background-color: #d4ac0d;
-      transform: scale(1.05);
+    nav a:hover {
+      text-decoration: underline;
     }
-
     .content-section {
       display: none;
       padding: 2rem;
-      max-width: 900px;
-      margin: auto;
     }
-
     .content-section.active {
       display: block;
     }
+    h2 {
+      color: #003366;
+    }
 
-    .event {
-      background-color: #f7faff;
-      border: 2px solid #dceffd;
+    /* Images infos */
+    .info-images {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .info-images img {
+      max-width: 45%;
       border-radius: 12px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
-    .event img {
-      width: 100%;
-      max-width: 600px;
-      border-radius: 10px;
-      margin-top: 1.5rem;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, opacity 0.5s ease;
+    /* Carte d’embarquement */
+    .boarding-pass {
+      position: relative;
+      background: white;
+      border: 2px dashed #003366;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      width: 90%;
+      max-width: 650px;
+      margin: 1.5rem auto;
+      animation: fadeIn 0.6s ease-in-out;
     }
-
-    .event p {
-      font-size: 1.2rem;
-      margin: 0.5rem 0;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    .image-switcher {
+    .boarding-pass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("fond_carte.png") center/cover no-repeat, #e6eef5;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+    .boarding-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1rem;
-      font-weight: bold;
-      color: #2c3e50;
+      flex-wrap: wrap;
     }
-
-    .image-switcher a {
-      color: #2980b9;
-      text-decoration: underline;
-      cursor: pointer;
+    .boarding-header h3 {
+      margin: 0;
+      color: #003366;
+      font-size: 1.2rem;
     }
-
-    #dotsContainer {
-      margin-top: 1rem;
-      font-size: 1.5rem;
+    .boarding-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem 1rem;
+      margin-bottom: 1rem;
     }
-
-    .dot {
-      cursor: pointer;
-      margin: 0 5px;
-      user-select: none;
+    .boarding-details div {
+      font-size: 0.95rem;
     }
-
-    .placeholder {
-      text-align: center;
-      font-size: 1.3rem;
+    .boarding-details strong {
+      display: block;
+      font-size: 0.8rem;
       color: #555;
-      margin-top: 3rem;
+    }
+    .boarding-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .boarding-footer img {
+      width: 90px;
+    }
+    .note {
+      font-size: 0.85rem;
+      color: #444;
+      margin-top: 0.5rem;
+      text-align: center;
     }
 
-    footer {
+    .select-wrapper {
+      margin-bottom: 2rem;
       text-align: center;
-      padding: 1rem;
+    }
+    select {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border: 2px solid #003366;
+      border-radius: 6px;
+    }
+    .admin-btn {
+      display: block;
+      margin: 1rem auto;
+      background: #003366;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .download-btn {
+      display: inline-block;
+      background: #0055aa;
+      color: white;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
       font-size: 0.9rem;
-      color: #888;
-      margin-top: 2rem;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* 🔹 Correction impression */
+    @media print {
+      body {
+        background: white !important;
+      }
+      .boarding-pass {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin: 1rem auto;
+      }
+      nav, .admin-btn, .download-btn, select, .select-wrapper, header {
+        display: none !important;
+      }
     }
   </style>
 </head>
 <body>
-
-  <audio id="bgMusic" src="Musique.mp3" autoplay muted loop></audio>
-
-  <nav>
-    <a href="#" class="active" onclick="showSection(event, 'info')">Informations utiles</a>
-    <a href="#" onclick="showSection(event, 'plan')">Plan de table</a>
-    <a href="#" onclick="showSection(event, 'photos')">Photos</a>
-  </nav>
-
   <header>
-    <h1>Bar Mitsva de Benjamin</h1>
-    <p>🕊️ Rejoignez-nous pour deux moments inoubliables</p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdMz_DPmhKg5Tn46-pWnnLqYoa8tFFakUmQ_SzQpNVG3ul1OA/viewform?usp=dialog"
-       class="cta-button" target="_blank">📩 Confirmer votre présence</a>
+    <h1>Bar Mitsva de Benjamin 🎉✨</h1>
   </header>
 
+  <nav>
+    <a onclick="showSection('info')">📍 Informations utiles</a>
+    <a onclick="showSection('boarding')">🛳️ Cartes d’embarquement</a>
+  </nav>
+
+  <!-- Section Infos utiles -->
   <section id="info" class="content-section active">
-    <div class="event">
-      <div class="image-switcher">
-        <a href="javascript:void(0);" id="imageSwitcherLink">Voir les infos de la mise des Téphilines et la fête</a>
-      </div>
-      <img id="eventImage" src="Shabbat.jpg" alt="Événement" />
-      <p id="imageCaption">Lecture de la Paracha le samedi matin, suivie d’un kiddouch chaleureux.</p>
-      <div id="dotsContainer">
-        <span class="dot" onclick="goToImage(0)">●</span>
-        <span class="dot" onclick="goToImage(1)">○</span>
-      </div>
+    <h2>📍 Informations utiles</h2>
+    <div class="info-images">
+      <img src="Shabbat.jpg" alt="Célébration du Shabbat">
+      <img src="TephilineFete.jpg" alt="Tefilline et fête">
+      <img src="PlanDacces_BelAmi.jpg" alt="Plan d’accès au bateau Bel-Ami">
     </div>
   </section>
 
-  <section id="plan" class="content-section">
-    <div class="placeholder">🪑 Le plan de table sera disponible prochainement.</div>
+  <!-- Section Cartes d’embarquement -->
+  <section id="boarding" class="content-section">
+    <h2>🛳️ Cartes d’embarquement</h2>
+
+    <div class="select-wrapper">
+      <label for="guestSelect"><strong>Sélectionnez votre nom :</strong></label><br>
+      <select id="guestSelect">
+        <option value="">-- Choisir un invité --</option>
+      </select>
+    </div>
+
+    <div id="boardingContainer"></div>
+
+    <!-- Bouton admin -->
+    <button class="admin-btn" onclick="showAllCards()">Afficher toutes les cartes (admin)</button>
   </section>
 
-  <section id="photos" class="content-section">
-    <div class="placeholder">📸 Les photos de la fête seront ajoutées après l'événement !</div>
-  </section>
+  <!-- Librairie pour export PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <footer>
-    Site créé pour la Bar Mitsva de Benjamin © 2025
-  </footer>
+<script>
+  const guests = [
+    { name: "Alcoulombe Fabrice et Gaelle", table: "Friends" },
+    { name: "Allali Dan et Julie", table: "Friends" },
+    { name: "Amar Mickael et Elodie", table: "Casa de Papel" },
+    { name: "Amar Paulette", table: "Dallas" },
+    { name: "Amar Samuel", table: "Casa de Papel" },
+    { name: "Amar Shana", table: "Casa de Papel" },
+    { name: "Aouizerate Stéphane et Myriam", table: "Dallas" },
+    { name: "Aouizerate Yona", table: "Outer Banks" },
+    { name: "Athuil Ava", table: "Outer Banks" },
+    { name: "Ayach Liora", table: "Outer Banks" },
+    { name: "Azuelos Gad et Esther", table: "Fauda" },
+    { name: "Azuelos Haim", table: "Cobra Kai" },
+    { name: "Benchimol Yaakov", table: "Cobra Kai" },
+    { name: "Bensoussan Gabriella", table: "Outer Banks" },
+    { name: "Berrebi Samuel et Rebecca", table: "Fauda" },
+    { name: "Bismuth Aron", table: "Cobra Kai" },
+    { name: "Bokobza Dan et Yardena", table: "Fauda" },
+    { name: "Bokobza Liam", table: "Cobra Kai" },
+    { name: "Boni Benjamin", table: "Cobra Kai" },
+    { name: "Boni Charles et Elyette", table: "Bridgerton" },
+    { name: "Boni David, Lévi et Téhila", table: "Bridgerton" },
+    { name: "Boni Eden", table: "Outer Banks" },
+    { name: "Boni Mikael et Sandra", table: "Friends" },
+    { name: "Boni Raphael", table: "Outer Banks" },
+    { name: "Choukroun Rolland et Lydia", table: "Dallas" },
+    { name: "Drai Nathan", table: "Cobra Kai" },
+    { name: "Elbeze Anael", table: "Casa de Papel" },
+    { name: "Elbeze Eddy, Noémie et Noa", table: "Fauda" },
+    { name: "Esseryk Shana", table: "Outer Banks" },
+    { name: "Guedj Jean Claude et Dominique", table: "Dallas" },
+    { name: "Haccoun Avraham", table: "Outer Banks" },
+    { name: "Hadouk Ari", table: "Cobra Kai" },
+    { name: "Hazout Stella", table: "Outer Banks" },
+    { name: "Lebhar Chlomo", table: "Cobra Kai" },
+    { name: "Lujic Ethan", table: "Outer Banks" },
+    { name: "Malka Isaac et Judith", table: "Bridgerton" },
+    { name: "Malka Serge et Sandra", table: "Bridgerton" },
+    { name: "Rouach Raphael et Audrey", table: "Fauda" },
+    { name: "Slakmon Ruben", table: "Cobra Kai" },
+    { name: "Tebeka Michael et Yael", table: "Casa de Papel" },
+    { name: "Tebeka Shelly", table: "Casa de Papel" },
+    { name: "Tebeka Shirel", table: "Casa de Papel" },
+    { name: "Teboul Ouriel", table: "Cobra Kai" },
+    { name: "Tibi Yohan et Nathalie", table: "Friends" },
+    { name: "Valenzi Eli", table: "Outer Banks" },
+    { name: "Zerbib Freddy", table: "Dallas" },
+    { name: "Zerbib Gerard et Brigitte", table: "Dallas" },
+    { name: "Zerbib Yaron", table: "Cobra Kai" }
+  ];
 
-  <script>
-    function showSection(event, id) {
-      document.querySelectorAll('.content-section').forEach(section => {
-        section.classList.remove('active');
+  const container = document.getElementById("boardingContainer");
+  const select = document.getElementById("guestSelect");
+
+  // Remplir la liste déroulante
+  guests.forEach((guest, i) => {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = guest.name;
+    select.appendChild(option);
+  });
+
+  function createCard(guest, index) {
+    return `
+      <div class="boarding-pass" id="card-${index}">
+        <div class="boarding-header">
+          <h3>🎟 Carte d’embarquement</h3>
+          <span><strong>Passager :</strong> ${guest.name}</span>
+        </div>
+        <div class="boarding-details">
+          <div><strong>Bateau</strong> Péniche Bel-Ami</div>
+          <div><strong>Date</strong> Dim. 14 Sept. 2025</div>
+          <div><strong>Boarding</strong> 19h00 précises</div>
+          <div><strong>Retour</strong> 23h00 env.</div>
+          <div><strong>Gate</strong> Port Les Studios <br>(face au 52 Quai du Point du Jour)</div>
+          <div><strong>Seat</strong> Table ${guest.table}</div>
+          <div><strong>Aller / Retour </strong> Boulogne -> Bibliothèque François Mitterand</div>
+        </div>
+        <div class="boarding-footer">
+          <span>🎁 <strong>Ne pas oublier :</strong> votre <em>cadeau souvenir de la Bar Mitzva</em></span><br>
+          <span><img src="qr_montres.png" alt="QR Code"></span>
+          <p style="text-align:center; margin-top:30px;">
+            <a href="https://www.instagram.com/maguen.chalom?igsh=YmZwODQ5dHo0NHBu" target="_blank">
+              <img src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" alt="Instagram" width="30" style="vertical-align:middle;">
+            </a>
+          </p>
+        </div>
+        <p class="note">Merci d’arriver 30 minutes en avance pour l’embarquement ⏱</p>
+        <div style="text-align:center; margin-top:1rem;">
+          <button class="download-btn" onclick="downloadCard(${index})">📄 Télécharger en PDF</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Afficher la carte sélectionnée
+  select.addEventListener("change", () => {
+    container.innerHTML = "";
+    const value = select.value;
+    if (value !== "") {
+      container.innerHTML = createCard(guests[value], parseInt(value));
+      container.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+
+  // Mode admin
+  function showAllCards() {
+    let passcode = prompt("Mot de passe admin ?");
+    if (passcode === "BMadmin") {
+      container.innerHTML = "";
+      guests.forEach((guest, i) => {
+        container.innerHTML += createCard(guest, i);
       });
-      document.querySelectorAll('nav a').forEach(link => {
-        link.classList.remove('active');
-      });
-      document.getElementById(id).classList.add('active');
-      event.target.classList.add('active');
+      container.scrollIntoView({ behavior: "smooth" });
+    } else {
+      alert("Mot de passe incorrect !");
     }
+  }
 
-    const images = [
-      {
-        src: "Shabbat.jpg",
-        caption: "Lecture de la Paracha le samedi matin, suivie d’un kiddouch chaleureux.",
-        linkText: "Voir les infos de la mise des Téphilines et la fête"
-      },
-      {
-        src: "TephilineFete.jpg",
-        caption: "Mise des Téphilines dimanche matin, suivie de la fête 🎉.",
-        linkText: "Voir les infos du Shabbat"
-      }
-    ];
+  // Télécharger en PDF
+  function downloadCard(index) {
+    const element = document.getElementById(`card-${index}`);
+    const opt = {
+      margin: 0.5,
+      filename: `Carte_BarMitsva_${guests[index].name.replace(/ /g,"_")}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    html2pdf().from(element).set(opt).save();
+  }
 
-    let currentIndex = 0;
-    let carouselInterval;
-
-    function showImage(index) {
-      const imageEl = document.getElementById("eventImage");
-      const captionEl = document.getElementById("imageCaption");
-      const linkEl = document.getElementById("imageSwitcherLink");
-      const dots = document.querySelectorAll("#dotsContainer .dot");
-
-      imageEl.style.opacity = 0;
-      captionEl.style.opacity = 0;
-
-      setTimeout(() => {
-        imageEl.src = images[index].src;
-        captionEl.textContent = images[index].caption;
-        linkEl.textContent = images[index].linkText;
-        imageEl.style.opacity = 1;
-        captionEl.style.opacity = 1;
-
-        dots.forEach((dot, i) => {
-          dot.textContent = i === index ? "●" : "○";
-        });
-      }, 200);
-
-      currentIndex = index;
-    }
-
-    function toggleImage() {
-      const nextIndex = (currentIndex + 1) % images.length;
-      showImage(nextIndex);
-    }
-
-    function goToImage(index) {
-      showImage(index);
-      resetCarouselTimer();
-    }
-
-    function startCarousel() {
-      carouselInterval = setInterval(toggleImage, 8000);
-    }
-
-    function resetCarouselTimer() {
-      clearInterval(carouselInterval);
-      startCarousel();
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      showImage(currentIndex);
-      startCarousel();
-
-      // Activer le son après interaction
-      const audio = document.getElementById("bgMusic");
-      function enableSoundOnce() {
-        audio.muted = false;
-        audio.play();
-        document.removeEventListener("click", enableSoundOnce);
-        document.removeEventListener("keydown", enableSoundOnce);
-      }
-
-      document.addEventListener("click", enableSoundOnce);
-      document.addEventListener("keydown", enableSoundOnce);
-
-      document.getElementById("imageSwitcherLink").addEventListener("click", () => {
-        toggleImage();
-        resetCarouselTimer();
-      });
-    });
-  </script>
-
+  function showSection(id) {
+    document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+</script>
 </body>
 </html>
