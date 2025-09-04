@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan de Table - Bar Mitzvah</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f5f8fc; color: #222; }
+    header {
+      background: #003366; color: white; padding: 1rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    nav a {
+      color: white; margin: 0 .8rem; text-decoration: none; font-weight: 500;
+    }
+    nav a:hover { text-decoration: underline; }
+    section { display: none; padding: 2rem; }
+    section.active { display: block; }
+
+    /* ---- Plan de table ---- */
+    .plan-wrapper { max-width: 1100px; margin: 0 auto; }
+    .plan-header { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .plan-header h2 { margin: 0; color: #003366; }
+    .plan-controls { display: flex; gap: .75rem; flex-wrap: wrap; }
+    .plan-controls select, .plan-controls input {
+      padding: .6rem .8rem; border: 2px solid #003366; border-radius: 8px; font-size: .95rem; min-width: 220px; background: #fff;
+    }
+    .plan-grid {
+      display: grid; gap: 1rem;
+      grid-template-columns: repeat( auto-fit, minmax(260px, 1fr) );
+    }
+    .table-card {
+      border-radius: 14px; overflow: hidden; background: #ffffff;
+      box-shadow: 0 8px 22px rgba(0,0,0,.08);
+      border: 1px solid #e6eef5;
+      transition: transform .15s ease;
+    }
+    .table-card:hover { transform: translateY(-2px); }
+    .table-hero {
+      position: relative; height: 120px; background: #cfd9e6 center/cover no-repeat;
+      display: flex; align-items: flex-end; padding: .75rem;
+    }
+    .table-hero::after {
+      content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,0));
+    }
+    .table-title {
+      position: relative; color: #fff; font-weight: 700; z-index: 1; display: flex; align-items: center; gap: .5rem;
+    }
+    .badge {
+      background: rgba(255,255,255,.9); color: #0b2a55; border-radius: 999px; padding: .2rem .55rem; font-size: .8rem; font-weight: 700;
+    }
+    .table-body { padding: .9rem .9rem 1rem; }
+    .guest-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .35rem; }
+    .guest-list li {
+      background: #f7faff; border: 1px solid #e7f0fb; border-radius: 10px; padding: .5rem .6rem; font-size: .95rem;
+    }
+    .guest-list li.highlight { outline: 2px solid #f1c40f; background: #fff8dc; }
+    .plan-note { margin-top: .5rem; color: #6b7b8f; font-size: .85rem; text-align: right; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Bar Mitzvah</h1>
+    <nav>
+      <a href="#" onclick="showSection('infos')">Infos</a>
+      <a href="#" onclick="showSection('plan')">Plan de Table</a>
+    </nav>
+  </header>
+
+  <section id="infos" class="content-section active">
+    <h2>Informations utiles</h2>
+    <p>Bienvenue à la fête ! 🎉</p>
+  </section>
+
+  <!-- ====== PLAN DE TABLE ====== -->
+  <section id="plan" class="content-section">
+    <div class="plan-wrapper">
+      <div class="plan-header">
+        <h2>🪑 Plan de table (séries)</h2>
+        <div class="plan-controls">
+          <select id="filterTable">
+            <option value="">Toutes les tables</option>
+            <option>Friends</option>
+            <option>Casa de Papel</option>
+            <option>Dallas</option>
+            <option>Outer Banks</option>
+            <option>Fauda</option>
+            <option>Cobra Kai</option>
+            <option>Bridgerton</option>
+          </select>
+          <input id="searchGuest" type="search" placeholder="🔎 Rechercher un invité…" />
+        </div>
+      </div>
+
+      <div id="planGrid" class="plan-grid"></div>
+      <div class="plan-note">Astuce : tapez un nom pour le mettre en surbrillance et faire défiler jusqu’à sa table.</div>
+    </div>
+  </section>
+  <!-- ====== /PLAN DE TABLE ====== -->
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // ---- Données invités ----
+    const guests = [
+      { name: "Alcoulombe Fabrice et Gaelle", table: "Friends" },
+      { name: "Allali Dan et Julie", table: "Friends" },
+      { name: "Amar Mickael et Elodie", table: "Casa de Papel" },
+      { name: "Amar Paulette", table: "Dallas" },
+      { name: "Amar Samuel", table: "Casa de Papel" },
+      { name: "Amar Shana", table: "Casa de Papel" },
+      { name: "Aouizerate Stéphane et Myriam", table: "Dallas" },
+      { name: "Aouizerate Yona", table: "Outer Banks" },
+      { name: "Athuil Ava", table: "Outer Banks" },
+      { name: "Ayach Leora", table: "Outer Banks" },
+      { name: "Azuelos Gad et Esther", table: "Fauda" },
+      { name: "Azuelos Haim", table: "Cobra Kai" },
+      { name: "Benchimol Yaakov", table: "Cobra Kai" },
+      { name: "Bensoussan Gabriella", table: "Outer Banks" },
+      { name: "Berrebi Samuel et Rebecca", table: "Fauda" },
+      { name: "Bismuth Aron", table: "Cobra Kai" },
+      { name: "Bokobza Dan et Yardena", table: "Fauda" },
+      { name: "Bokobza Liam", table: "Cobra Kai" },
+      { name: "Boni Benjamin", table: "Cobra Kai" },
+      { name: "Boni Charles et Elyette", table: "Bridgerton" },
+      { name: "Boni David, Lévi et Téhila", table: "Bridgerton" },
+      { name: "Boni Eden", table: "Outer Banks" },
+      { name: "Boni Mikael et Sandra", table: "Friends" },
+      { name: "Boni Raphael", table: "Outer Banks" },
+      { name: "Choukroun Rolland et Lydia", table: "Dallas" },
+      { name: "Drai Nathan", table: "Cobra Kai" },
+      { name: "Elbeze Anael", table: "Casa de Papel" },
+      { name: "Elbeze Eddy, Noémie et Noa", table: "Fauda" },
+      { name: "Esseryk Shana", table: "Outer Banks" },
+      { name: "Guedj Jean Claude et Dominique", table: "Dallas" },
+      { name: "Haccoun Avraham", table: "Outer Banks" },
+      { name: "Hadouk Ari", table: "Cobra Kai" },
+      { name: "Hazout Stella", table: "Outer Banks" },
+      { name: "Lebhar Chlomo", table: "Cobra Kai" },
+      { name: "Lujic Ethan", table: "Outer Banks" },
+      { name: "Malka Isaac et Judith", table: "Bridgerton" },
+      { name: "Malka Serge et Sandra", table: "Bridgerton" },
+      { name: "Rouach Raphael et Audrey", table: "Fauda" },
+      { name: "Slakmon Ruben", table: "Cobra Kai" },
+      { name: "Tebeka Michael et Yael", table: "Casa de Papel" },
+      { name: "Tebeka Shelly", table: "Casa de Papel" },
+      { name: "Tebeka Shirel", table: "Casa de Papel" },
+      { name: "Teboul Ouriel", table: "Cobra Kai" },
+      { name: "Tibi Yohan et Nathalie", table: "Friends" },
+      { name: "Valenzi Elie", table: "Outer Banks" },
+      { name: "Zerbib Freddy", table: "Dallas" },
+      { name: "Zerbib Gerard et Brigitte", table: "Dallas" },
+      { name: "Zerbib Yaron", table: "Cobra Kai" }
+    ];
+
+    // ---- Images par table ----
+    const tableImages = {
+      "Friends": "friends.jpg",
+      "Casa de Papel": "casadepapel.jpg",
+      "Dallas": "dallas.jpg",
+      "Outer Banks": "outerbanks.jpg",
+      "Fauda": "fauda.jpg",
+      "Cobra Kai": "cobrakai.jpg",
+      "Bridgerton": "bridgerton.jpg"
+    };
+
+    const planGrid = document.getElementById('planGrid');
+    const filterTable = document.getElementById('filterTable');
+    const searchInput = document.getElementById('searchGuest');
+
+    function groupByTable(data) {
+      return data.reduce((acc, item) => {
+        (acc[item.table] ||= []).push(item.name);
+        return acc;
+      }, {});
+    }
+
+    function createCard(tableName, names) {
+      const card = document.createElement('div');
+      card.className = 'table-card';
+      card.dataset.table = tableName;
+
+      const hero = document.createElement('div');
+      hero.className = 'table-hero';
+      if (tableImages[tableName]) hero.style.backgroundImage = `url('${tableImages[tableName]}')`;
+
+      const title = document.createElement('div');
+      title.className = 'table-title';
+      title.innerHTML = `<span>${tableName}</span> <span class="badge">${names.length}</span>`;
+      hero.appendChild(title);
+
+      const body = document.createElement('div');
+      body.className = 'table-body';
+      const ul = document.createElement('ul');
+      ul.className = 'guest-list';
+
+      names.sort((a,b)=>a.localeCompare(b,'fr')).forEach(n => {
+        const li = document.createElement('li');
+        li.textContent = n;
+        li.dataset.guest = n.toLowerCase();
+        ul.appendChild(li);
+      });
+
+      body.appendChild(ul);
+      card.appendChild(hero);
+      card.appendChild(body);
+      return card;
+    }
+
+    function render(gridData) {
+      planGrid.innerHTML = '';
+      const order = ["Friends","Casa de Papel","Dallas","Outer Banks","Fauda","Cobra Kai","Bridgerton"];
+      order.filter(t => !filterTable.value || t === filterTable.value)
+           .forEach(t => {
+             if (gridData[t]) planGrid.appendChild(createCard(t, gridData[t]));
+           });
+    }
+
+    filterTable.addEventListener('change', () => {
+      render(groupByTable(guests));
+      searchInput.value = '';
+    });
+
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.trim().toLowerCase();
+      document.querySelectorAll('.guest-list li').forEach(li => li.classList.remove('highlight'));
+      if (!q) return;
+      const match = Array.from(document.querySelectorAll('.guest-list li'))
+        .find(li => li.dataset.guest.includes(q));
+      if (match) {
+        match.classList.add('highlight');
+        match.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+
+    render(groupByTable(guests));
+  </script>
+</body>
+</html>
