@@ -79,14 +79,12 @@
     .boarding-footer img { width: 90px; }
     .note { font-size: .85rem; color: #444; margin-top: .5rem; text-align: center; }
 
-    /* ====== Plan de table (version “jolie”) ====== */
+    /* ====== Plan de table ====== */
     .plan-wrapper { max-width: 1100px; margin: 0 auto; }
     .plan-header {
       display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; justify-content: space-between;
       margin-bottom: 1rem;
     }
-    .plan-header h2 { margin: 0; color: #003366; }
-    .plan-controls { display: flex; gap: .75rem; flex-wrap: wrap; }
     .plan-controls select, .plan-controls input {
       padding: .6rem .8rem; border: 2px solid #003366; border-radius: 8px;
       font-size: .95rem; min-width: 220px; background: #fff;
@@ -100,57 +98,40 @@
       box-shadow: 0 8px 22px rgba(0,0,0,.08);
       border: 1px solid #e6eef5; transition: transform .15s ease;
     }
-    .table-card:hover { transform: translateY(-2px); }
-    .table-hero {
-      position: relative; height: 120px; background: #cfd9e6 center/cover no-repeat;
-      display: flex; align-items: flex-end; padding: .75rem;
-    }
-    .table-hero::after {
-      content: ""; position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,0));
-    }
-    .table-title {
-      position: relative; color: #fff; font-weight: 700; z-index: 1;
-      display: flex; align-items: center; gap: .5rem;
-    }
-    .badge {
-      background: rgba(255,255,255,.9); color: #0b2a55;
-      border-radius: 999px; padding: .2rem .55rem; font-size: .8rem; font-weight: 700;
-    }
+    .table-hero { position: relative; height: 120px; background: #cfd9e6 center/cover no-repeat; display:flex; align-items:flex-end; padding:.75rem; }
+    .table-title { position: relative; color: #fff; font-weight:700; z-index:1; display:flex; align-items:center; gap:.5rem; }
+    .badge { background: rgba(255,255,255,.9); color: #0b2a55; border-radius:999px; padding:.2rem .55rem; font-size:.8rem; font-weight:700; }
     .table-body { padding: .9rem .9rem 1rem; }
-    .guest-list {
-      list-style: none; padding: 0; margin: 0; display: grid; gap: .35rem;
-    }
-    .guest-list li {
-      background: #f7faff; border: 1px solid #e7f0fb; border-radius: 10px;
-      padding: .5rem .6rem; font-size: .95rem;
-    }
-    .guest-list li.highlight { outline: 2px solid #f1c40f; background: #fff8dc; }
-    .plan-note { margin-top: .5rem; color: #6b7b8f; font-size: .85rem; text-align: right; }
+    .guest-list li { background: #f7faff; border: 1px solid #e7f0fb; border-radius: 10px; padding: .5rem .6rem; font-size: .95rem; }
 
     /* ====== Galerie Photos + Lightbox ====== */
     .gallery {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem; padding: 1rem;
     }
-    .gallery img {
+    .gallery img, .gallery video, .gallery .video-thumb {
       width: 100%; height: 200px; object-fit: cover;
       border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,.2);
-      cursor: pointer; transition: transform .3s ease;
+      cursor: pointer; transition: transform .3s ease; background:#eee; display:block;
     }
-    .gallery img:hover { transform: scale(1.05); }
+    .gallery img:hover, .gallery video:hover, .gallery .video-thumb:hover { transform: scale(1.03); }
+    .video-thumb {
+      display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; background:#000;
+      position:relative;
+    }
+    .video-thumb .play-icon {
+      position:absolute; width:64px; height:64px; background: rgba(0,0,0,.45); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px;
+    }
 
     .lightbox {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,.9); display: flex; justify-content: center; align-items: center;
-      visibility: hidden; opacity: 0; transition: opacity .3s ease; z-index: 9999;
+      visibility: hidden; opacity: 0; transition: opacity .18s ease; z-index: 9999;
     }
     .lightbox.active { visibility: visible; opacity: 1; }
-    .lightbox img { max-width: 90%; max-height: 90%; border-radius: 12px; }
-    .lightbox::after {
-      content: "✖"; position: absolute; top: 20px; right: 30px;
-      font-size: 2rem; color: #fff; cursor: pointer;
-    }
+    .lightbox .media { max-width: 95%; max-height: 95%; border-radius: 12px; }
+    .lightbox .close { position:absolute; top:18px; right:22px; color:#fff; font-size:28px; cursor:pointer; }
+    .note { font-size:.9rem; color:#666; margin-top:0.6rem; text-align:center; }
   </style>
 </head>
 <body>
@@ -159,10 +140,10 @@
   </header>
 
   <nav>
-    <a data-target="info" class="">Informations utiles</a>
-    <a data-target="boarding" class="active">Cartes d’embarquement</a>
-    <a data-target="plan" class="">Plan de table</a>
-    <a data-target="photos" class="">Photos</a>
+    <a data-target="info">Informations utiles</a>
+    <a data-target="boarding" >Cartes d’embarquement</a>
+    <a data-target="plan">Plan de table</a>
+    <a data-target="photos" class="active">Photos & vidéos</a>
   </nav>
 
   <!-- ====== Infos utiles ====== -->
@@ -206,9 +187,9 @@
             <option>Outer Banks</option>
             <option>Cobra Kai</option>
             <option>Bridgerton</option>
-			<option>Game Of Thrones</option>
-			<option>Outlander</option>
-			<option>Mercredi</option>
+            <option>Game Of Thrones</option>
+            <option>Outlander</option>
+            <option>Mercredi</option>
           </select>
           <input id="searchGuest" type="search" placeholder="🔎 Rechercher un invité…" />
         </div>
@@ -218,261 +199,407 @@
     </div>
   </section>
 
-  <!-- ====== Photos ====== -->
+  <!-- ====== Photos & vidéos ====== -->
   <section id="photos" class="content-section">
-    <h2>📷 Photos de la fête</h2>
-    <p style="text-align:center; color:#666;">Les photos prises par les invités seront ajoutées ici 🎉</p>
-    <div class="gallery" id="photosContainer">
-      <!-- Exemples -->
-      <img src="Benj1.jpg" alt="Benjamin 1">
-      <img src="fond_carte.png" alt="Bel Ami (fond)">
-      <img src="Benj2.jpg" alt="Benjamin 2">
-    </div>
+    <h2>📷 Photos & 🎞️ Vidéos de la fête</h2>
+    <div class="gallery" id="photosContainer" aria-live="polite"></div>
   </section>
 
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox"><img src="" alt="Agrandissement"></div>
+  <!-- Lightbox overlay (image or video) -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Agrandissement média">
+    <div class="close" id="lbClose" title="Fermer">✖</div>
+    <div id="lbContent"></div>
+  </div>
 
-  <script>
-    /* ====== Données partagées ====== */
-	const guests = [
-	  { name: "Alcoulombre Fabrice et Gaelle", table: "Friends" },
-	  { name: "Allali Dan et Julie", table: "Friends" },
-	  { name: "Amar Mickael et Elodie", table: "Casa de Papel" },
-	  { name: "Amar Paulette", table: "Dallas" },
-	  { name: "Amar Samuel", table: "Mercredi" },
-	  { name: "Amar Shana", table: "Mercredi" },
-	  { name: "Aouizerate Stéphane et Myriam", table: "Casa de Papel" },
-	  { name: "Aouizerate Yona", table: "Mercredi" },
-	  { name: "Athuil Ava", table: "Outer Banks" },
-	  { name: "Ayach Leora", table: "Outer Banks" },
-	  { name: "Ayache Sylver", table: "Dallas" },
-	  { name: "Azuelos Gad et Esther", table: "Outlander" },
-	  { name: "Azuelos Haim", table: "Cobra Kai" },
-	  { name: "Benchimol Yaakov", table: "Cobra Kai" },
-	  { name: "Bensoussan Gabriella", table: "Outer Banks" },
-	  { name: "Berrebi Samuel et Rebecca", table: "Game Of Thrones" },
-	  { name: "Bismuth Aron", table: "Cobra Kai" },
-	  { name: "Bokobza Dan et Yardena", table: "Outlander" },
-	  { name: "Bokobza Liam", table: "Cobra Kai" },
-	  { name: "Boni Benjamin", table: "Cobra Kai" },
-	  { name: "Boni Charles et Elyette", table: "Bridgerton" },
-	  { name: "Boni David, Lévi et Téhila", table: "Bridgerton" },
-	  { name: "Boni Eden", table: "Outer Banks" },
-	  { name: "Boni Mikael et Sandra", table: "Friends" },
-	  { name: "Boni Raphael", table: "Outer Banks" },
-	  { name: "Choukroun Roland et Lydia", table: "Dallas" },
-	  { name: "Drai Nathan", table: "Cobra Kai" },
-	  { name: "Elbeze Anael", table: "Game Of Thrones" },
-	  { name: "Elbeze Eddy, Noémie et Noah", table: "Game Of Thrones" },
-	  { name: "Esseryk Shana", table: "Outer Banks" },
-	  { name: "Guedj Jean Claude et Dominique", table: "Dallas" },
-	  { name: "Hadouk Ari", table: "Cobra Kai" },
-	  { name: "Haccoun Avraham", table: "Outer Banks" },
-	  { name: "Hazout Stella", table: "Outer Banks" },
-	  { name: "Lebhar Chlomo", table: "Cobra Kai" },
-	  { name: "Lujic Ethan", table: "Outer Banks" },
-	  { name: "Malka Isaac et Judith", table: "Bridgerton" },
-	  { name: "Malka Serge et Sandra", table: "Bridgerton" },
-	  { name: "Rouach Raphael et Audrey", table: "Outlander" },
-	  { name: "Slakmon Ruben", table: "Cobra Kai" },
-	  { name: "Tebeka Michael et Yael", table: "Casa de Papel" },
-	  { name: "Tebeka Shely", table: "Mercredi" },
-	  { name: "Tebeka Shyrel", table: "Mercredi" },
-	  { name: "Teboul Ouriel", table: "Cobra Kai" },
-	  { name: "Tibi Yohan et Nathalie", table: "Friends" },
-	  { name: "Valenzi Elie", table: "Outer Banks" },
-	  { name: "Zerbib Freddy", table: "Casa de Papel" },
-	  { name: "Zerbib Gerard et Brigitte", table: "Dallas" },
-	  { name: "Zerbib Yaron", table: "Mercredi" }
-	];
+<script>
+/* ===========================
+   Données (fichiers fournis)
+   =========================== */
+const imageFiles = [
+  "WhatsApp Image 2025-09-19 à 18.32.24_fff16030.jpg",
+  "WhatsApp Image 2025-09-19 à 18.32.24_9b4540e6.jpg",
+  "WhatsApp Image 2025-09-19 à 18.32.24_53f1fb93.jpg",
+  "WhatsApp Image 2025-09-19 à 18.32.24_cd3c7588.jpg",
+  "WhatsApp Image 2025-09-19 à 18.32.24_013f2731.jpg",
+  "WhatsApp Image 2025-09-19 à 18.32.24_e172054a.jpg",
+  "WhatsApp Image 2025-09-19 à 18.32.24_3e59d025.jpg",
+  "WhatsApp Image 2025-09-19 à 18.32.23_6acfc2e9.jpg",
+  "WhatsApp Image 2025-09-19 à 18.32.21_74287601.jpg",
+  "WhatsApp Image 2025-09-19 à 18.32.24_378eb679.jpg",
+  "WhatsApp Image 2025-09-19 à 18.32.24_11adcd1f.jpg",
+  "IMG-20250919-WA0105.jpg","IMG-20250919-WA0104.jpg","IMG-20250919-WA0103.jpg",
+  "IMG-20250919-WA0102.jpg","IMG-20250919-WA0101.jpg","IMG-20250919-WA0100.jpg",
+  "IMG-20250919-WA0099.jpg","IMG-20250919-WA0098.jpg","IMG-20250919-WA0097.jpg",
+  "IMG-20250919-WA0096.jpg","IMG-20250919-WA0095.jpg","IMG-20250919-WA0094.jpg",
+  "IMG-20250919-WA0093.jpg","IMG-20250919-WA0092.jpg","IMG-20250919-WA0091.jpg",
+  "IMG-20250919-WA0090.jpg","IMG-20250919-WA0088.jpg","IMG-20250919-WA0087.jpg",
+  "IMG-20250919-WA0086.jpg","IMG-20250919-WA0085.jpg","IMG-20250919-WA0084.jpg",
+  "IMG-20250919-WA0083.jpg","IMG-20250919-WA0082.jpg"
+];
 
-    /* ====== Navigation (un seul gestionnaire) ====== */
-    const sections = document.querySelectorAll('.content-section');
-    const navLinks = document.querySelectorAll('nav a');
-    function showSection(id) {
-      sections.forEach(s => s.classList.toggle('active', s.id === id));
-      navLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
-    }
-    navLinks.forEach(a => a.addEventListener('click', () => showSection(a.dataset.target)));
-
-    /* ====== Cartes d’embarquement ====== */
-    const container = document.getElementById('boardingContainer');
-    const select = document.getElementById('guestSelect');
-
-    // Remplir la liste déroulante
-    guests.forEach((g, i) => {
-      const opt = document.createElement('option');
-      opt.value = i; opt.textContent = g.name; select.appendChild(opt);
-    });
-
-    function createCard(guest, index) {
-      return `
-        <div class="boarding-pass" id="card-${index}">
-          <div class="boarding-header">
-            <h3>🎟 Carte d’embarquement</h3>
-            <span><strong>Passager :</strong> ${guest.name}</span>
-          </div>
-          <div class="boarding-details">
-            <div><strong>Bateau</strong> Péniche Bel-Ami</div>
-            <div><strong>Date</strong> Dim. 14 Sept. 2025</div>
-            <div><strong>Boarding</strong> 19h00 précises</div>
-            <div><strong>Retour</strong> 23h00 env.</div>
-            <div><strong>Gate</strong> Port Les Studios<br>(face au 52 Quai du Point du Jour)</div>
-            <div><strong>Seat</strong> Table ${guest.table}</div>
-            <div><strong>Aller / Retour</strong> Boulogne → Bibliothèque François Mitterrand → Boulogne</div>
-          </div>
-          <div class="boarding-footer">
-            <span>🎁 <strong>Ne pas oublier :</strong> votre <em>cadeau souvenir de la Bar Mitzva</em></span>
-            <span>
-              <a href="https://www.instagram.com/maguen.chalom?igsh=YmZwODQ5dHo0NHBu" target="_blank" rel="noopener">
-                <img src="qr_montres.png" alt="QR Code">
-              </a>
-            </span>
-            <p style="text-align:center; margin-top:30px; width:100%;">
-              <a href="https://www.instagram.com/maguen.chalom?igsh=YmZwODQ5dHo0NHBu" target="_blank" rel="noopener">
-                <img src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" alt="Instagram" width="30" style="vertical-align:middle;">
-              </a>
-            </p>
-          </div>
-          <p class="note">Merci d’arriver 15 minutes en avance pour l’embarquement ⏱</p>
-        </div>
-      `;
-    }
-
-    // Afficher la carte sélectionnée
-    select.addEventListener('change', () => {
-      container.innerHTML = '';
-      if (select.value !== '') {
-        const idx = parseInt(select.value, 10);
-        container.innerHTML = createCard(guests[idx], idx);
-      }
-    });
-
-    // Mode admin : afficher toutes les cartes
-    function showAllCards() {
-      const passcode = prompt('Mot de passe admin ?');
-      if (passcode === 'BMadmin') {
-        container.innerHTML = guests.map((g, i) => createCard(g, i)).join('');
-      } else {
-        alert('Mot de passe incorrect !');
-      }
-    }
-    window.showAllCards = showAllCards; // pour le bouton
-
-    /* ====== Plan de table ====== */
-    const tableImages = {
-      "Friends": "friends.jpg",
-      "Casa de Papel": "casadepapel.jpg",
-      "Dallas": "dallas.jpg",
-      "Outer Banks": "outerbanks.jpg",
-      "Cobra Kai": "cobrakai.jpg",
-      "Bridgerton": "bridgerton.jpg",
-	  "Game Of Thrones": "gameofthrones.jpg",
-	  "Outlander": "outlander.jpg",
-	  "Mercredi": "mercredi.jpg"	  
-    };
-    const planGrid = document.getElementById('planGrid');
-    const filterTable = document.getElementById('filterTable');
-    const searchInput = document.getElementById('searchGuest');
-
-    function groupByTable(data) {
-      return data.reduce((acc, item) => {
-        (acc[item.table] ||= []).push(item.name);
-        return acc;
-      }, {});
-    }
-
-	// --- Compter correctement le nombre de personnes dans une entrée "name" ---
-	function countPeople(name) {
-	  if (!name) return 0;
-	  let s = String(name).trim().replace(/\s+/g, ' ');
-
-	  // uniformiser les séparateurs
-	  s = s.replace(/[\/+&]/g, ' et ');
-	  s = s.replace(/\(.*?\)/g, '').trim();
-
-	  // découpe sur "et" ou ","
-	  const parts = s.split(/\s*(?:,|\s+et\s+)\s*/i).map(p => p.trim()).filter(Boolean);
-	  return parts.length;
-	}
+const videoFiles = [
+  "VID-20250919-WA0016.mp4",
+  "VID-20250919-WA0015.mp4",
+  "VID-20250919-WA0014.mp4",
+  "VID-20250919-WA0013.mp4",
+  "VID-20250919-WA0012.mp4",
+  "VID-20250919-WA0011.mp4",
+  "VID-20250919-WA0010.mp4",
+  "WhatsApp Vidéo 2025-09-19 à 18.32.24_f7f2d2a0.mp4"
+];
 
 
-    function createTableCard(tableName, names) {
-      const card = document.createElement('div');
-      card.className = 'table-card';
-      card.dataset.table = tableName;
+/* ===========================
+   Utilitaires
+   =========================== */
+function encodePath(filename) {
+  // encodeURIComponent pour gérer espaces / accents / caractères spéciaux
+  return '' + encodeURIComponent(filename);
+}
+function makePlaceholderSVG(text, w=900, h=600) {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}'>
+    <rect width='100%' height='100%' fill='#eceff3'/>
+    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#9aa7b8' font-family='Arial,sans-serif' font-size='20'>
+      ${text}
+    </text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
 
-      const hero = document.createElement('div');
-      hero.className = 'table-hero';
-      if (tableImages[tableName]) hero.style.backgroundImage = `url('${tableImages[tableName]}')`;
+/* ===========================
+   Initialisation galerie
+   =========================== */
+const photosContainer = document.getElementById('photosContainer');
+function addImageThumb(filename) {
+  const img = document.createElement('img');
+  img.alt = filename;
+  img.src = encodePath(filename);
+  // fallback si erreur
+  img.addEventListener('error', () => {
+    img.src = makePlaceholderSVG('Fichier introuvable\\n' + filename);
+  });
+  img.addEventListener('click', () => openLightboxImage(img.src, filename));
+  photosContainer.appendChild(img);
+}
+function addVideoThumb(filename) {
+  // thumb container (we show a static-looking block with play icon)
+  const div = document.createElement('div');
+  div.className = 'video-thumb';
+  div.title = filename;
 
-      const title = document.createElement('div');
-      title.className = 'table-title';
-      //title.innerHTML = `<span>${tableName}</span> <span class="badge">${names.length}</span>`;
-	  const totalPeople = names.reduce((sum, guestName) => sum + countPeople(guestName), 0);
-	  title.innerHTML = `<span>${tableName}</span> <span class="badge">${totalPeople}</span>`;
-      hero.appendChild(title);
+  // Insert a small <video> element set to muted, preload metadata for poster if available.
+  const thumb = document.createElement('video');
+  thumb.muted = true;
+  thumb.playsInline = true;
+  thumb.preload = 'metadata';
+  thumb.style.height = '100%';
+  thumb.style.width = '100%';
+  thumb.style.objectFit = 'cover';
 
-      const body = document.createElement('div');
-      body.className = 'table-body';
-      const ul = document.createElement('ul');
-      ul.className = 'guest-list';
+  const source = document.createElement('source');
+  source.src = encodePath(filename);
+  source.type = 'video/mp4';
+  thumb.appendChild(source);
 
-		names.sort((a,b)=>a.localeCompare(b,'fr')).forEach(n => {
-		  const li = document.createElement('li');
-		  const c = countPeople(n);
-		  li.innerHTML = `${n}${c > 1 ? ` <small style="color:#666">(${c})</small>` : ''}`;
-		  li.dataset.guest = n.toLowerCase();
-		  ul.appendChild(li);
-		});
+  // If video can't load, show placeholder image inside the div
+  thumb.addEventListener('error', () => {
+    const ph = document.createElement('img');
+    ph.alt = filename;
+    ph.src = makePlaceholderSVG('Vidéo introuvable\\n' + filename);
+    ph.style.width = '100%';
+    ph.style.height = '100%';
+    ph.style.objectFit = 'cover';
+    div.innerHTML = '';
+    div.appendChild(ph);
+    const playIcon = document.createElement('div');
+    playIcon.className = 'play-icon';
+    playIcon.innerHTML = '▶';
+    div.appendChild(playIcon);
+  });
 
-      body.appendChild(ul);
-      card.appendChild(hero);
-      card.appendChild(body);
-      return card;
-    }
+  // Add a translucent play icon overlay
+  const playIcon = document.createElement('div');
+  playIcon.className = 'play-icon';
+  playIcon.innerHTML = '▶';
+  div.appendChild(thumb);
+  div.appendChild(playIcon);
 
-    function renderPlan(gridData) {
-      planGrid.innerHTML = '';
-      const order = ["Friends","Casa de Papel","Dallas","Outer Banks","Cobra Kai","Bridgerton","Game Of Thrones","Outlander","Mercredi"];
-	  order
-        .filter(t => !filterTable.value || t === filterTable.value)
-        .forEach(t => { if (gridData[t]) planGrid.appendChild(createTableCard(t, gridData[t])); });
-    }
+  // Click opens lightbox video
+  div.addEventListener('click', () => openLightboxVideo(filename));
+  photosContainer.appendChild(div);
+}
 
-    filterTable.addEventListener('change', () => {
-      renderPlan(groupByTable(guests));
-      searchInput.value = '';
-    });
+/* populate gallery */
+imageFiles.forEach(addImageThumb);
+videoFiles.forEach(addVideoThumb);
 
-    searchInput.addEventListener('input', () => {
-      const q = searchInput.value.trim().toLowerCase();
-      document.querySelectorAll('.guest-list li').forEach(li => li.classList.remove('highlight'));
-      if (!q) return;
-      const match = Array.from(document.querySelectorAll('.guest-list li'))
-        .find(li => li.dataset.guest.includes(q));
-      if (match) {
-        match.classList.add('highlight');
-        match.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
+/* ===========================
+   Lightbox (image or video)
+   =========================== */
+const lightbox = document.getElementById('lightbox');
+const lbContent = document.getElementById('lbContent');
+const lbClose = document.getElementById('lbClose');
 
-    // Initial render du plan
-    renderPlan(groupByTable(guests));
+function openLightboxImage(src, filename) {
+  lbContent.innerHTML = '';
+  const img = document.createElement('img');
+  img.className = 'media';
+  img.src = src;
+  img.alt = filename;
+  img.addEventListener('error', () => { img.src = makePlaceholderSVG('Fichier introuvable\\n' + filename); });
+  lbContent.appendChild(img);
+  lightbox.classList.add('active');
+  lightbox.setAttribute('aria-hidden','false');
+  // focus for ESC
+  document.addEventListener('keydown', onEscClose);
+}
 
-    /* ====== Galerie / Lightbox ====== */
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = lightbox.querySelector('img');
-    document.querySelectorAll('.gallery img').forEach(img => {
-      img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
-        lightbox.classList.add('active');
-      });
-    });
-    lightbox.addEventListener('click', (e) => {
-      if (e.target !== lightboxImg) lightbox.classList.remove('active');
-    });
-  </script>
+function openLightboxVideo(filename) {
+  lbContent.innerHTML = '';
+  const v = document.createElement('video');
+  v.className = 'media';
+  v.controls = true;
+  v.autoplay = true;
+  v.playsInline = true;
+  v.src = encodePath(filename);
+  // error -> placeholder
+  v.addEventListener('error', () => {
+    lbContent.innerHTML = '';
+    const ph = document.createElement('img');
+    ph.className = 'media';
+    ph.src = makePlaceholderSVG('Vidéo introuvable\\n' + filename);
+    lbContent.appendChild(ph);
+  });
+  lbContent.appendChild(v);
+  lightbox.classList.add('active');
+  lightbox.setAttribute('aria-hidden','false');
+  document.addEventListener('keydown', onEscClose);
+}
+
+function closeLightbox() {
+  // stop video if any
+  const v = lbContent.querySelector('video');
+  if (v) {
+    v.pause();
+    v.src = '';
+  }
+  lbContent.innerHTML = '';
+  lightbox.classList.remove('active');
+  lightbox.setAttribute('aria-hidden','true');
+  document.removeEventListener('keydown', onEscClose);
+}
+function onEscClose(e) {
+  if (e.key === 'Escape') closeLightbox();
+}
+lbClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox) closeLightbox();
+});
+
+/* ===========================
+   Données invités / boarding / plan (repris)
+   =========================== */
+const guests = [
+  { name: "Alcoulombre Fabrice et Gaelle", table: "Friends" },
+  { name: "Allali Dan et Julie", table: "Friends" },
+  { name: "Amar Mickael et Elodie", table: "Casa de Papel" },
+  { name: "Amar Paulette", table: "Dallas" },
+  { name: "Amar Samuel", table: "Mercredi" },
+  { name: "Amar Shana", table: "Mercredi" },
+  { name: "Aouizerate Stéphane et Myriam", table: "Casa de Papel" },
+  { name: "Aouizerate Yona", table: "Mercredi" },
+  { name: "Athuil Ava", table: "Outer Banks" },
+  { name: "Ayach Leora", table: "Outer Banks" },
+  { name: "Ayache Sylver", table: "Dallas" },
+  { name: "Azuelos Gad et Esther", table: "Outlander" },
+  { name: "Azuelos Haim", table: "Cobra Kai" },
+  { name: "Benchimol Yaakov", table: "Cobra Kai" },
+  { name: "Bensoussan Gabriella", table: "Outer Banks" },
+  { name: "Berrebi Samuel et Rebecca", table: "Game Of Thrones" },
+  { name: "Bismuth Aron", table: "Cobra Kai" },
+  { name: "Bokobza Dan et Yardena", table: "Outlander" },
+  { name: "Bokobza Liam", table: "Cobra Kai" },
+  { name: "Boni Benjamin", table: "Cobra Kai" },
+  { name: "Boni Charles et Elyette", table: "Bridgerton" },
+  { name: "Boni David, Lévi et Téhila", table: "Bridgerton" },
+  { name: "Boni Eden", table: "Outer Banks" },
+  { name: "Boni Mikael et Sandra", table: "Friends" },
+  { name: "Boni Raphael", table: "Outer Banks" },
+  { name: "Choukroun Roland et Lydia", table: "Dallas" },
+  { name: "Drai Nathan", table: "Cobra Kai" },
+  { name: "Elbeze Anael", table: "Game Of Thrones" },
+  { name: "Elbeze Eddy, Noémie et Noah", table: "Game Of Thrones" },
+  { name: "Esseryk Shana", table: "Outer Banks" },
+  { name: "Guedj Jean Claude et Dominique", table: "Dallas" },
+  { name: "Hadouk Ari", table: "Cobra Kai" },
+  { name: "Haccoun Avraham", table: "Outer Banks" },
+  { name: "Hazout Stella", table: "Outer Banks" },
+  { name: "Lebhar Chlomo", table: "Cobra Kai" },
+  { name: "Lujic Ethan", table: "Outer Banks" },
+  { name: "Malka Isaac et Judith", table: "Bridgerton" },
+  { name: "Malka Serge et Sandra", table: "Bridgerton" },
+  { name: "Rouach Raphael et Audrey", table: "Outlander" },
+  { name: "Slakmon Ruben", table: "Cobra Kai" },
+  { name: "Tebeka Michael et Yael", table: "Casa de Papel" },
+  { name: "Tebeka Shely", table: "Mercredi" },
+  { name: "Tebeka Shyrel", table: "Mercredi" },
+  { name: "Teboul Ouriel", table: "Cobra Kai" },
+  { name: "Tibi Yohan et Nathalie", table: "Friends" },
+  { name: "Valenzi Elie", table: "Outer Banks" },
+  { name: "Zerbib Freddy", table: "Casa de Papel" },
+  { name: "Zerbib Gerard et Brigitte", table: "Dallas" },
+  { name: "Zerbib Yaron", table: "Mercredi" }
+];
+
+/* ===== Navigation (sections) ===== */
+const sections = document.querySelectorAll('.content-section');
+const navLinks = document.querySelectorAll('nav a');
+function showSection(id) {
+  sections.forEach(s => s.classList.toggle('active', s.id === id));
+  navLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+}
+navLinks.forEach(a => a.addEventListener('click', () => showSection(a.dataset.target)));
+
+/* ===== Cartes d'embarquement ===== */
+const select = document.getElementById('guestSelect');
+const boardingContainer = document.getElementById('boardingContainer');
+guests.forEach((g,i) => {
+  const opt = document.createElement('option');
+  opt.value = i; opt.textContent = g.name; select.appendChild(opt);
+});
+function createCard(guest, index) {
+  return `
+    <div class="boarding-pass" id="card-${index}">
+      <div class="boarding-header">
+        <h3>🎟 Carte d’embarquement</h3>
+        <span><strong>Passager :</strong> ${guest.name}</span>
+      </div>
+      <div class="boarding-details">
+        <div><strong>Bateau</strong> Péniche Bel-Ami</div>
+        <div><strong>Date</strong> Dim. 14 Sept. 2025</div>
+        <div><strong>Boarding</strong> 19h00 précises</div>
+        <div><strong>Retour</strong> 23h00 env.</div>
+        <div><strong>Gate</strong> Port Les Studios<br>(face au 52 Quai du Point du Jour)</div>
+        <div><strong>Seat</strong> Table ${guest.table}</div>
+        <div><strong>Aller / Retour</strong> Boulogne → Bibliothèque François Mitterrand → Boulogne</div>
+      </div>
+      <div class="boarding-footer">
+        <span>🎁 <strong>Ne pas oublier :</strong> votre <em>cadeau souvenir de la Bar Mitzva</em></span>
+        <span>
+          <a href="https://www.instagram.com/maguen.chalom?igsh=YmZwODQ5dHo0NHBu" target="_blank" rel="noopener">
+            <img src="qr_montres.png" alt="QR Code">
+          </a>
+        </span>
+      </div>
+      <p class="note">Merci d’arriver 15 minutes en avance pour l’embarquement ⏱</p>
+    </div>
+  `;
+}
+select.addEventListener('change', () => {
+  boardingContainer.innerHTML = '';
+  if (select.value !== '') {
+    boardingContainer.innerHTML = createCard(guests[parseInt(select.value,10)], parseInt(select.value,10));
+  }
+});
+function showAllCards() {
+  const passcode = prompt('Mot de passe admin ?');
+  if (passcode === 'BMadmin') {
+    boardingContainer.innerHTML = guests.map((g,i) => createCard(g,i)).join('');
+  } else alert('Mot de passe incorrect !');
+}
+window.showAllCards = showAllCards;
+
+/* ===== Plan de table functions ===== */
+const tableImages = {
+  "Friends": "friends.jpg",
+  "Casa de Papel": "casadepapel.jpg",
+  "Dallas": "dallas.jpg",
+  "Outer Banks": "outerbanks.jpg",
+  "Cobra Kai": "cobrakai.jpg",
+  "Bridgerton": "bridgerton.jpg",
+  "Game Of Thrones": "gameofthrones.jpg",
+  "Outlander": "outlander.jpg",
+  "Mercredi": "mercredi.jpg"
+};
+const planGrid = document.getElementById('planGrid');
+const filterTable = document.getElementById('filterTable');
+const searchInput = document.getElementById('searchGuest');
+
+function groupByTable(data) {
+  return data.reduce((acc, item) => {
+    (acc[item.table] ||= []).push(item.name);
+    return acc;
+  }, {});
+}
+
+function countPeople(name) {
+  if (!name) return 0;
+  let s = String(name).trim().replace(/\s+/g,' ');
+  s = s.replace(/[\/+&]/g, ' et ');
+  s = s.replace(/\(.*?\)/g,'').trim();
+  const parts = s.split(/\s*(?:,|\s+et\s+)\s*/i).map(p=>p.trim()).filter(Boolean);
+  return parts.length;
+}
+
+function createTableCard(tableName, names) {
+  const card = document.createElement('div');
+  card.className = 'table-card';
+  card.dataset.table = tableName;
+
+  const hero = document.createElement('div');
+  hero.className = 'table-hero';
+  if (tableImages[tableName]) hero.style.backgroundImage = `url('${tableImages[tableName]}')`;
+
+  const title = document.createElement('div');
+  title.className = 'table-title';
+  const totalPeople = names.reduce((sum, guestName) => sum + countPeople(guestName), 0);
+  title.innerHTML = `<span>${tableName}</span> <span class="badge">${totalPeople}</span>`;
+  hero.appendChild(title);
+
+  const body = document.createElement('div');
+  body.className = 'table-body';
+  const ul = document.createElement('ul');
+  ul.className = 'guest-list';
+
+  names.sort((a,b)=>a.localeCompare(b,'fr')).forEach(n=>{
+    const li = document.createElement('li');
+    const c = countPeople(n);
+    li.innerHTML = `${n}${c>1 ? ` <small style="color:#666">(${c})</small>` : ''}`;
+    li.dataset.guest = n.toLowerCase();
+    ul.appendChild(li);
+  });
+
+  body.appendChild(ul);
+  card.appendChild(hero);
+  card.appendChild(body);
+  return card;
+}
+
+function renderPlan(gridData) {
+  planGrid.innerHTML = '';
+  const order = ["Friends","Casa de Papel","Dallas","Outer Banks","Cobra Kai","Bridgerton","Game Of Thrones","Outlander","Mercredi"];
+  order.filter(t => !filterTable.value || t === filterTable.value)
+       .forEach(t => { if (gridData[t]) planGrid.appendChild(createTableCard(t, gridData[t])); });
+}
+
+filterTable.addEventListener('change', () => { renderPlan(groupByTable(guests)); searchInput.value=''; });
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  document.querySelectorAll('.guest-list li').forEach(li => li.classList.remove('highlight'));
+  if (!q) return;
+  const match = Array.from(document.querySelectorAll('.guest-list li'))
+    .find(li => li.dataset.guest.includes(q));
+  if (match) { match.classList.add('highlight'); match.scrollIntoView({behavior:'smooth', block:'center'}); }
+});
+
+// initial render
+renderPlan(groupByTable(guests));
+
+/* ===== make sure first visible section remains the one with .active link ===== */
+document.addEventListener('DOMContentLoaded', () => {
+  const activeNav = document.querySelector('nav a.active');
+  if (activeNav) showSection(activeNav.dataset.target);
+});
+</script>
 </body>
 </html>
